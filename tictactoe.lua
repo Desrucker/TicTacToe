@@ -1,11 +1,11 @@
-----------------------------------------------
+-------------------------------------------------
 -- create new table to hold the board matrix
-----------------------------------------------
+-------------------------------------------------
 local board = {}
 
-----------------------------------------------
--- clear the board table
-----------------------------------------------
+-------------------------------------------------
+-- clear the board table emptying all positions
+-------------------------------------------------
 function clear_board()
   for i = 1, 3 do
     -- new row
@@ -16,38 +16,41 @@ function clear_board()
   end
 end
 
-----------------------------------------------
--- display the board table
-----------------------------------------------
+-------------------------------------------------
+-- display the board table on the console
+-------------------------------------------------
 function display_board()
-  -- TODO:
-  -- Loop all positions of the board
-  -- and display the values in the console
+  -- loop all rows
+  print("   1  2  3 ")
+  for i = 1, 3 do
+    print(i.." ["..board[i][1].."]["..board[i][2].."]["..board[i][3].."]")
+  end
 end
 
-----------------------------------------------
--- is board full
-----------------------------------------------
+-------------------------------------------------
+-- return true or false if the board is full
+-------------------------------------------------
 function board_full()
-  -- TODO:
-  -- Loop all positions of the board
-  -- and check if they are all populated
-  -- returning true (full) or false (not full)
+  for i = 1, 3 do
+    for j = 1, 3 do
+      if board[i][j] == " " then
+        return false
+      end
+    end
+  end
+  return true
 end
 
------------------------------------------------
--- function to check and return the winnner
------------------------------------------------
+-------------------------------------------------
+-- function to check winnner and returns X or O
+-------------------------------------------------
 function check_winner()
-  -- TODO:
-  -- Check all rows, columsn, and diagonals
-  -- to see if there is a winner.
-  -- If there is one, return "X" or "O"
+  
 end
 
------------------------------------------------
+-------------------------------------------------
 -- game starts
------------------------------------------------
+-------------------------------------------------
 local player = "X"
 local move = 1
 local game_over = false
@@ -63,24 +66,31 @@ while not game_over do
   print("Enter the col you want to place the symbol "..player..": ")
   local col_to_play = io.read("*n")
 
-  -- assign current player if the move is even or odd
-  if move % 2 == 0 then
-    player = "X"
+  -- prevent the user to select a position that is already taken
+  if board[row_to_play][col_to_play] ~= " " then
+    print("Invalid! Please select an empty position.")
   else
-    player = "O"
-  end
+    board[row_to_play][col_to_play] = player
 
-  move = move + 1
+    -- the current player if based on odd/even move
+    if move % 2 == 0 then
+      player = "X"
+    else
+      player = "O"
+    end
 
-  -- check if there is a winner
-  local winner = check_winner()
+    move = move + 1
 
-  if winner ~= nil then
-    display_board()
-    print("Winner is "..winner)
-    game_over = true
-  elseif board_full() then
-    print("Tie")
-    game_over = true
+    -- check if there is a winner
+    local winner = check_winner()
+
+    if winner ~= nil then
+      display_board()
+      print("Game Over! The winner is "..winner)
+      game_over = true
+    elseif board_full() then
+      print("Game Over! Tie.")
+      game_over = true
+    end
   end
 end
