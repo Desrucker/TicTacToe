@@ -66,10 +66,8 @@ local function get_user_input(promt_message)
     end
     print(player_labels[current_player].. ", ".. promt_message)
     number = io.read()
-    if number:match("%a") then -- Check if the input contains letters, if so, reset to 0
-      number = 0
-    elseif (number:match("%p")) then -- Check if the input contains punctuation characters, if so, reset to 0
-      number = 0                      
+    if number:match("%a") or number:match("%p") then -- Check if the input contains letters or punctuation characters, if so, reset to 0
+      number = 0                    
     else
       number = tonumber(number) 
     end
