@@ -1,11 +1,12 @@
 -- Tic-tac-toe game
+-- @author Dominic Rucker
 
 -- Define the game board
 local board = {}
 
 -- Initialize or reset the board to an empty state
 function clear_board()
-  for (i = 1, 3) do 
+  for i = 1, 3 do 
     board[i] = { " ", " ", " " }  -- Set each cell to a space
   end
 end
@@ -13,15 +14,15 @@ end
 -- Display the current state of the board
 function display_board()
   print("   1  2  3 ")
-  for (i = 1, 3) do
+  for i = 1, 3 do
       print(i.." ["..table.concat(board[i], "][").."]")  -- Join cells with ']['
   end
 end
 
 -- Check if all board cells are occupied
 function board_full()
-  for (i = 1, 3) do
-      for (j = 1, 3) do
+  for i = 1, 3 do
+      for j = 1, 3 do
           if (board[i][j] == " ") then 
             return false 
           end
@@ -32,8 +33,9 @@ end
 
 -- Check rows, columns, and diagonals for a win
 function check_winner()
+  
   -- Check rows and columns
-  for (i = 1, 3) do
+  for i = 1, 3 do
       if (board[i][1] == board[i][2] and board[i][2] == board[i][3] and board[i][1] ~= " ") then 
         return board[i][1] 
       end
