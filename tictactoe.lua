@@ -64,11 +64,21 @@ clear_board()
 while not game_over do
   display_board()
 
-  -- Prompt player for move
-  print(player_labels[current_player] .. ", enter row:")
-  local row_to_play = io.read("*n")
-  print(player_labels[current_player] .. ", enter col:")
-  local col_to_play = io.read("*n")
+  local row_to_play, col_to_play = nil, nil
+  local count = 0
+  
+  repeat
+    -- Prompt player for move
+    if (count > 0) then
+      print("Try again")
+    end
+    print(player_labels[current_player] .. ", enter row:")
+    row_to_play = io.read("*n")
+    print(player_labels[current_player] .. ", enter col:")
+    col_to_play = io.read("*n")
+
+    count = count + 1
+  until (row_to_play >=1 and row_to_play <=3 and col_to_play >=1 and col_to_play <=3)
 
   -- Ensure chosen cell isn't already occupied
   if board[row_to_play][col_to_play] ~= " " then
