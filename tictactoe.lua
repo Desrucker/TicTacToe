@@ -23,7 +23,7 @@ end
 function board_full()
   for i = 1, 3 do
       for j = 1, 3 do
-          if (board[i][j] == " ") then 
+          if board[i][j] == " " then 
             return false 
           end
       end
@@ -33,58 +33,58 @@ end
 
 -- Check rows, columns, and diagonals for a win
 function check_winner()
-  
   -- Check rows and columns
   for i = 1, 3 do
-      if (board[i][1] == board[i][2] and board[i][2] == board[i][3] and board[i][1] ~= " ") then 
+      if board[i][1] == board[i][2] and board[i][2] == board[i][3] and board[i][1] ~= " " then 
         return board[i][1] 
       end
-      if (board[1][i] == board[2][i] and board[2][i] == board[3][i] and board[1][i] ~= " ") then 
+      if board[1][i] == board[2][i] and board[2][i] == board[3][i] and board[1][i] ~= " " then 
         return board[1][i] 
       end
   end
   -- Check diagonals
-  if (board[1][1] == board[2][2] and board[2][2] == board[3][3] and board[1][1] ~= " ") then 
+  if board[1][1] == board[2][2] and board[2][2] == board[3][3] and board[1][1] ~= " " then 
     return board[1][1] 
   end
-  if (board[1][3] == board[2][2] and board[2][2] == board[3][1] and board[1][3] ~= " ") then 
+  if board[1][3] == board[2][2] and board[2][2] == board[3][1] and board[1][3] ~= " " then 
     return board[1][3] 
   end
   return nil
 end
 
--- Initialize game with Player 'X' going first
-local player = "X"
+-- Initialize game with Player 'X' (Player 1) going first
+local current_player = "X"
+local player_labels = { X = "Player 1", O = "Player 2" }
 local game_over = false
 
 -- Start with a clear board
 clear_board()
 
 -- Main game loop
-while (not game_over) do
+while not game_over do
   display_board()
 
   -- Prompt player for move
-  print("Enter row for "..player..":")
+  print(player_labels[current_player] .. ", enter row:")
   local row_to_play = io.read("*n")
-  print("Enter col for "..player..":")
+  print(player_labels[current_player] .. ", enter col:")
   local col_to_play = io.read("*n")
 
   -- Ensure chosen cell isn't already occupied
-  if (board[row_to_play][col_to_play] ~= " ") then
+  if board[row_to_play][col_to_play] ~= " " then
       print("Cell occupied. Choose another.")
   else
       -- Register move and toggle player
-      board[row_to_play][col_to_play] = player
-      player = (player == "X") and "O" or "X"  -- Switch player
+      board[row_to_play][col_to_play] = current_player
+      current_player = current_player == "X" and "O" or "X"  -- Switch player
 
       -- Determine game outcome
       local winner = check_winner()
-      if (winner) then
+      if winner then
           display_board()
-          print("Winner: "..winner)
+          print("Winner: " .. player_labels[winner])
           game_over = true
-      elseif (board_full()) then
+      elseif board_full() then
           print("Draw!")
           game_over = true
       end
