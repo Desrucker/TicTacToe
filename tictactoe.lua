@@ -1,96 +1,90 @@
--- Initialize the tic-tac-toe board as a 2D table
+-- Tic-tac-toe game
+
+-- Define the game board
 local board = {}
 
--- Clear the board by setting all positions to an empty space
+-- Initialize or reset the board to an empty state
 function clear_board()
-  for i = 1, 3 do
-    board[i] = {}
-    for j = 1, 3 do
-      board[i][j] = " "
-    end
+  for (i = 1, 3) do 
+    board[i] = { " ", " ", " " }  -- Set each cell to a space
   end
 end
 
--- Display the current state of the board to the console
+-- Display the current state of the board
 function display_board()
-  print("   1  2  3 ") -- Column headers
-  for i = 1, 3 do
-    print(i.." ["..board[i][1].."]["..board[i][2].."]["..board[i][3].."]") -- Display each row with row number
+  print("   1  2  3 ")
+  for (i = 1, 3) do
+      print(i.." ["..table.concat(board[i], "][").."]")  -- Join cells with ']['
   end
 end
 
--- Check if the board is full (no empty spaces left)
+-- Check if all board cells are occupied
 function board_full()
-  for i = 1, 3 do
-    for j = 1, 3 do
-      if board[i][j] == " " then
-        return false
+  for (i = 1, 3) do
+      for (j = 1, 3) do
+          if (board[i][j] == " ") then 
+            return false 
+          end
       end
-    end
   end
   return true
 end
 
--- Check if there's a winning move on the board, return the winning player's symbol or nil if none
+-- Check rows, columns, and diagonals for a win
 function check_winner()
-   -- Check rows
-   if board[1][1] ~= " " and board[1][1] == board[1][2] and board[1][2] == board[1][3] then return board[1][1] end
-   if board[2][1] ~= " " and board[2][1] == board[2][2] and board[2][2] == board[2][3] then return board[2][1] end
-   if board[3][1] ~= " " and board[3][1] == board[3][2] and board[3][2] == board[3][3] then return board[3][1] end
-   -- Check columns
-   if board[1][1] ~= " " and board[1][1] == board[2][1] and board[2][1] == board[3][1] then return board[1][1] end
-   if board[1][2] ~= " " and board[1][2] == board[2][2] and board[2][2] == board[3][2] then return board[1][2] end
-   if board[1][3] ~= " " and board[1][3] == board[2][3] and board[2][3] == board[3][3] then return board[1][3] end
-   -- Check diagonals
-   if board[1][1] ~= " " and board[1][1] == board[2][2] and board[2][2] == board[3][3] then return board[1][1] end
-   if board[1][3] ~= " " and board[1][3] == board[2][2] and board[2][2] == board[3][1] then return board[1][3] end
-
-   return nil
+  -- Check rows and columns
+  for (i = 1, 3) do
+      if (board[i][1] == board[i][2] and board[i][2] == board[i][3] and board[i][1] ~= " ") then 
+        return board[i][1] 
+      end
+      if (board[1][i] == board[2][i] and board[2][i] == board[3][i] and board[1][i] ~= " ") then 
+        return board[1][i] 
+      end
+  end
+  -- Check diagonals
+  if (board[1][1] == board[2][2] and board[2][2] == board[3][3] and board[1][1] ~= " ") then 
+    return board[1][1] 
+  end
+  if (board[1][3] == board[2][2] and board[2][2] == board[3][1] and board[1][3] ~= " ") then 
+    return board[1][3] 
+  end
+  return nil
 end
 
--- Initialize game variables
-local player = "X"     -- Start with player X
-local move = 1         -- Track the current move number
+-- Initialize game with Player 'X' going first
+local player = "X"
 local game_over = false
 
--- Clear the board at the start of the game
+-- Start with a clear board
 clear_board()
 
 -- Main game loop
-while not game_over do
+while (not game_over) do
   display_board()
 
-  print("Enter the row you want to place the symbol "..player..": ")
+  -- Prompt player for move
+  print("Enter row for "..player..":")
   local row_to_play = io.read("*n")
-  print("Enter the col you want to place the symbol "..player..": ")
+  print("Enter col for "..player..":")
   local col_to_play = io.read("*n")
 
-  -- Check if the chosen position is already taken
-  if board[row_to_play][col_to_play] ~= " " then
-    print("Invalid! Please select an empty position.")
+  -- Ensure chosen cell isn't already occupied
+  if (board[row_to_play][col_to_play] ~= " ") then
+      print("Cell occupied. Choose another.")
   else
-    -- Make the move
-    board[row_to_play][col_to_play] = player
+      -- Register move and toggle player
+      board[row_to_play][col_to_play] = player
+      player = (player == "X") and "O" or "X"  -- Switch player
 
-    -- Toggle between X and O
-    if move % 2 == 0 then
-      player = "X"
-    else
-      player = "O"
-    end
-
-    -- Increment move count
-    move = move + 1
-
-    -- Check for a winner or if the game is a tie
-    local winner = check_winner()
-    if winner ~= nil then
-      display_board()
-      print("Game Over! The winner is "..winner)
-      game_over = true
-    elseif board_full() then
-      print("Game Over! Tie.")
-      game_over = true
-    end
+      -- Determine game outcome
+      local winner = check_winner()
+      if (winner) then
+          display_board()
+          print("Winner: "..winner)
+          game_over = true
+      elseif (board_full()) then
+          print("Draw!")
+          game_over = true
+      end
   end
 end
