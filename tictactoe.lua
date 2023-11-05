@@ -7,7 +7,7 @@ local board = {}
 -- Initialize or reset the board to an empty state
 function clear_board()
   for i = 1, 3 do 
-    board[i] = { " ", " ", " " }  -- Set each cell to a space
+    board[i] = { " ", " ", " " }  -- Each board cell initialized with a space
   end
 end
 
@@ -15,7 +15,8 @@ end
 function display_board()
   print("   1  2  3 ")
   for i = 1, 3 do
-      print(i.." ["..table.concat(board[i], "][").."]")  -- Join cells with ']['
+      -- Using table.concat() to join cells with '][' delimiter
+      print(i.." ["..table.concat(board[i], "][").."]")  
   end
 end
 
@@ -23,18 +24,20 @@ end
 function board_full()
   for i = 1, 3 do
       for j = 1, 3 do
+          -- If any cell is empty, return false
           if board[i][j] == " " then 
             return false 
           end
       end
   end
-  return true
+  return true  -- All cells occupied
 end
 
--- Check rows, columns, and diagonals for a win
+-- Check rows, columns, and diagonals for a winning move
 function check_winner()
   -- Check rows and columns
   for i = 1, 3 do
+      -- Check for horizontal and vertical wins
       if board[i][1] == board[i][2] and board[i][2] == board[i][3] and board[i][1] ~= " " then 
         return board[i][1] 
       end
@@ -42,53 +45,64 @@ function check_winner()
         return board[1][i] 
       end
   end
-  -- Check diagonals
+  -- Check for diagonal wins
   if board[1][1] == board[2][2] and board[2][2] == board[3][3] and board[1][1] ~= " " then 
     return board[1][1] 
   end
   if board[1][3] == board[2][2] and board[2][2] == board[3][1] and board[1][3] ~= " " then 
     return board[1][3] 
   end
-  return nil
+  return nil  -- No winner
 end
 
--- Initialize game with Player 'X' (Player 1) going first
-local current_player = "X"
-local player_labels = { X = "Player 1", O = "Player 2" }
-local game_over = false
+-- Get user input for the next move
+local function get_user_input(promt_message)
+  count = 0
+  number = 0
+  repeat
+    -- If invalid input, notify the user and prompt again
+    if (count > 0) then
+      print("Try again")
+    end
+    print(player_labels[current_player].. ", ".. promt_message)
+    number = io.read()
+    if number:match("%a") then -- Check if the input contains letters, if so, reset to 0
+      number = 0
+    elseif (number:match("%p")) then -- Check if the input contains punctuation characters, if so, reset to 0
+      number = 0                      
+    else
+      number = tonumber(number) 
+    end
+    count = count + 1
+  until (number > 0 and number < 4)  -- Ensure the input is between 1 and 3 (inclusive)
+  return number
+end
 
--- Start with a clear board
+
+-- Initialize game settings
+current_player = "X"  -- Start with Player 'X'
+player_labels = { X = "Player 1", O = "Player 2" }
+local game_over = false  -- Track the game status
+
+-- Initialize the game board
 clear_board()
 
 -- Main game loop
 while not game_over do
   display_board()
 
-  local row_to_play, col_to_play = nil, nil
-  local count = 0
-  
-  repeat
-    -- Prompt player for move
-    if (count > 0) then
-      print("Try again")
-    end
-    print(player_labels[current_player] .. ", enter row:")
-    row_to_play = io.read("*n")
-    print(player_labels[current_player] .. ", enter col:")
-    col_to_play = io.read("*n")
+  local row_to_play = get_user_input("Enter row: ")
+  local col_to_play = get_user_input("Enter col: ")
 
-    count = count + 1
-  until (row_to_play >=1 and row_to_play <=3 and col_to_play >=1 and col_to_play <=3)
-
-  -- Ensure chosen cell isn't already occupied
+  -- Check if the chosen cell is available
   if board[row_to_play][col_to_play] ~= " " then
       print("Cell occupied. Choose another.")
   else
-      -- Register move and toggle player
+      -- Make the move and switch to the next player
       board[row_to_play][col_to_play] = current_player
-      current_player = current_player == "X" and "O" or "X"  -- Switch player
+      current_player = current_player == "X" and "O" or "X"
 
-      -- Determine game outcome
+      -- Check the board state for a winner or draw
       local winner = check_winner()
       if winner then
           display_board()
