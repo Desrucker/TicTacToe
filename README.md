@@ -1,41 +1,41 @@
-# Tic-tac-toe Game
+# Tic-tac-toe in Lua
 
-A simple terminal-based Tic-tac-toe game implemented in Lua.
+A simple command-line implementation of the classic Tic-tac-toe game in Lua.
 
 ## Author
-Dominic Rucker
 
-## Description
+- Dominic Rucker
 
-This game allows two players to take turns playing Tic-tac-toe. The game continues until a player wins or the board becomes full, resulting in a draw. The game displays the board state after every move and provides a clear indication of whose turn it is.
+## Overview
+
+This Tic-tac-toe game allows two players to take turns marking spots on a 3x3 grid. The first player to get three marks in a row (horizontally, vertically, or diagonally) wins the game. If all spots on the board are filled without any player getting three in a row, the game is declared a draw.
 
 ## Features
 
-- Board initialization and display
-- User input for row and column selection
-- Validation to prevent overwriting occupied cells
-- Checks for winning conditions (row, column, diagonals)
-- Checks for draw condition (all cells occupied)
+- Interactive command-line interface for players to input their moves.
+- A board display that updates after each move.
+- Checks to prevent players from marking an already occupied spot.
+- Win condition checks for rows, columns, and diagonals.
+- Notification when a player wins or the game is a draw.
 
 ## How to Play
 
-1. The game will start by displaying an empty board.
-2. Player 1 (X) will be prompted to enter the row and column they wish to mark.
-3. Player 2 (O) will be prompted next, and turns will alternate between players.
-4. If a player tries to play in an already occupied cell, they will be prompted to choose another cell.
-5. The game continues until a player wins or all cells are occupied (draw).
-6. At the end, the game displays the winner or announces a draw.
+1. Run the Lua script.
+2. Players will take turns, starting with Player 1 (marked as `X`).
+3. Each player will be prompted to enter a row number (1, 2, or 3) and a column number (1, 2, or 3) for their move.
+4. The board will be updated and displayed after each move.
+5. The game will continue until one player wins or all spots on the board are filled.
 
-## Code Overview
+## Functions Overview
 
-Here's a brief breakdown of the primary functions:
+- `clear_board()`: Initializes or resets the board to an empty state.
+- `display_board()`: Displays the current state of the board.
+- `board_full()`: Checks if all board cells are occupied, returning true if full and false otherwise.
+- `check_winner()`: Checks rows, columns, and diagonals to determine if there's a winner.
+- `get_user_input(promt_message)`: Gets the user input for the next move, ensuring it's valid.
 
-- `clear_board()`: Initializes or resets the game board.
-- `display_board()`: Prints the current state of the game board to the terminal.
-- `board_full()`: Checks if all cells on the board are occupied.
-- `check_winner()`: Determines if a player has won based on rows, columns, or diagonals.
-- The main game loop handles the player input, validates the moves, and checks the game's outcome after each move.
+## Future Enhancements (Potential)
 
-## Usage
-
-Make sure you have the Lua interpreter installed. Then, run the game using:
+- Incorporate an AI opponent for single-player mode.
+- Extend the game for larger board sizes, e.g., 5x5 or 7x7 grids.
+- Add a graphical user interface for a more visual gameplay experience.
