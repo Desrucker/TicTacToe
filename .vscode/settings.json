@@ -1,0 +1,6 @@
+{
+    "code-runner.executorMap": {
+        "lua": "lua54"
+    },
+    "code-runner.showExecutionMessage": false
+}
