@@ -71,7 +71,7 @@ local function get_user_input(promt_message)
     else
       number = tonumber(number) 
     end
-    count = count + 1
+    count = 1
   until (number > 0 and number < 4)  -- Ensure the input is between 1 and 3 (inclusive)
   return number
 end
